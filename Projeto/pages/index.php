@@ -1,140 +1,117 @@
 <?php
 
-$host = "localhost";
-$db = "Ecoquiz";
-$user = "root";
-$pass = "";
-$charset = "utf8mb4";
+require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../includes/header.php';
 
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+global $pdo;
 
-try {
-    $pdo = new PDO($dsn, $user, $pass, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-    ]);
-} catch (PDOException $e) {
-    die("Erro ao conectar ao banco: " . $e->getMessage());
-}
+$usuarioId = $_SESSION['usuario_id'];
+$nomeUsuario = $_SESSION['usuario_nome'] ?? 'Colaborador';
 
-$resultado = null;
-$pergunta = null;
+$stmtUserStats = $pdo->prepare("
+    SELECT 
+        COUNT(id) AS total_quizzes,
+        COALESCE(SUM(acertos), 0) AS total_acertos,
+        COALESCE(ROUND(AVG(pontuacao)), 0) AS media_aproveitamento
+    FROM ambiental_resultados 
+    WHERE usuario_id = :usuario_id
+");
+$stmtUserStats->execute([':usuario_id' => $usuarioId]);
+$minhasEstatisticas = $stmtUserStats->fetch();
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
+$stmtPosicao = $pdo->query("
+    SELECT u.id, ROUND(AVG(r.pontuacao)) AS media
+    FROM ambiental_usuarios u
+    INNER JOIN ambiental_resultados r ON u.id = r.usuario_id
+    GROUP BY u.id
+    ORDER BY media DESC, SUM(r.acertos) DESC
+");
+$rankingGeral = $stmtPosicao->fetchAll();
 
-    if (isset($_POST["responder"])) {
-
-        $id = (int) $_POST["id"];
-        $respostaUsuario = $_POST["resposta"];
-
-        $stmt = $pdo->prepare("SELECT * FROM pergunta WHERE id = :id");
-        $stmt->execute(["id" => $id]);
-
-        $pergunta = $stmt->fetch();
-
-        if (!$pergunta) {
-            die("Pergunta não encontrada.");
-        }
-
-        if ($respostaUsuario == $pergunta["resposta"]) {
-            $resultado = "correto";
-        } else {
-            $resultado = "errado";
-        }
-    }
-
-    if (isset($_POST["proxima"])) {
-        $pergunta = null;
+$posicaoRanking = '-';
+foreach ($rankingGeral as $index => $pos) {
+    if ($pos['id'] == $usuarioId) {
+        $posicaoRanking = ($index + 1) . 'º';
+        break;
     }
 }
-
-if ($pergunta === null) {
-    $stmt = $pdo->query("SELECT * FROM pergunta ORDER BY RAND() LIMIT 1");
-    $pergunta = $stmt->fetch();
-
-    if (!$pergunta) {
-        die("Não existem perguntas cadastradas.");
-    }
-}
-
 ?>
 
-<!DOCTYPE html>
-<html lang="pt-BR">
+<div class="page-header">
+  <div>
+    <h2>Painel do Colaborador</h2>
+    <p style="color: var(--muted); font-size: 0.95rem; margin-top: 4px;">
+      Bem-vindo de volta, <strong><?= htmlspecialchars($nomeUsuario) ?></strong>!
+    </p>
+  </div>
+  <a href="quiz.php" class="btn btn-primary">
+    <i class="fa-solid fa-play"></i> Iniciar EcoQuiz
+  </a>
+</div>
 
-<head>
-    <meta charset="UTF-8">
-    <title>EcoQuiz</title>
-</head>
+<div class="card-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 32px;">
+  
+  <div class="form-card" style="margin: 0; padding: 20px; text-align: center;">
+    <i class="fa-solid fa-gamepad" style="font-size: 2rem; color: var(--leaf-green); margin-bottom: 10px;"></i>
+    <span style="display: block; font-size: 0.85rem; color: var(--muted); text-transform: uppercase; font-weight: 600;">Quizzes Concluídos</span>
+    <div style="font-size: 2.2rem; font-weight: 800; color: var(--forest-green); margin-top: 4px;">
+      <?= $minhasEstatisticas['total_quizzes'] ?>
+    </div>
+  </div>
 
-<body>
+  <div class="form-card" style="margin: 0; padding: 20px; text-align: center;">
+    <i class="fa-solid fa-circle-check" style="font-size: 2rem; color: var(--leaf-green); margin-bottom: 10px;"></i>
+    <span style="display: block; font-size: 0.85rem; color: var(--muted); text-transform: uppercase; font-weight: 600;">Média de Acertos</span>
+    <div style="font-size: 2.2rem; font-weight: 800; color: var(--forest-green); margin-top: 4px;">
+      <?= $minhasEstatisticas['media_aproveitamento'] ?>%
+    </div>
+  </div>
 
-<h1>EcoQuiz</h1>
+  <div class="form-card" style="margin: 0; padding: 20px; text-align: center;">
+    <i class="fa-solid fa-trophy" style="font-size: 2rem; color: var(--leaf-green); margin-bottom: 10px;"></i>
+    <span style="display: block; font-size: 0.85rem; color: var(--muted); text-transform: uppercase; font-weight: 600;">Posição no Ranking</span>
+    <div style="font-size: 2.2rem; font-weight: 800; color: var(--forest-green); margin-top: 4px;">
+      <?= $posicaoRanking ?>
+    </div>
+  </div>
 
-<?php if ($resultado === "correto"): ?>
+</div>
 
-    <p>Resposta correta!</p>
+<h3 style="color: var(--forest-green); margin-bottom: 16px;">Módulos e Gestão</h3>
 
-<?php elseif ($resultado === "errado"): ?>
+<div class="card-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+  
+  <div class="form-card" style="margin: 0; max-width: 100%;">
+    <h4 style="color: var(--forest-green); margin-bottom: 8px;">
+      <i class="fa-solid fa-tree"></i> Áreas Preservadas
+    </h4>
+    <p style="margin-bottom: 16px; color: var(--muted); font-size: 0.9rem;">
+      Gerencie o registo e a monitorização de unidades de conservação ambiental.
+    </p>
+    <a href="areas.php" class="btn btn-full">Gerir Áreas</a>
+  </div>
 
-    <p>Resposta errada!</p>
-    <p>A resposta correta era: <?= htmlspecialchars($pergunta["resposta"]) ?></p>
+  <div class="form-card" style="margin: 0; max-width: 100%;">
+    <h4 style="color: var(--forest-green); margin-bottom: 8px;">
+      <i class="fa-solid fa-ranking-star"></i> Ranking de Preservação
+    </h4>
+    <p style="margin-bottom: 16px; color: var(--muted); font-size: 0.9rem;">
+      Acompanhe a pontuação geral dos colaboradores no quiz institucional.
+    </p>
+    <a href="ranking.php" class="btn btn-full">Ver Classificação</a>
+  </div>
 
-<?php endif; ?>
+  <div class="form-card" style="margin: 0; max-width: 100%;">
+    <h4 style="color: var(--forest-green); margin-bottom: 8px;">
+      <i class="fa-solid fa-clock-rotate-left"></i> Histórico do Quiz
+    </h4>
+    <p style="margin-bottom: 16px; color: var(--muted); font-size: 0.9rem;">
+      Consulte as suas tentativas passadas, pontuações e datas de conclusão.
+    </p>
+    <a href="historico.php" class="btn btn-full">Acessar Histórico</a>
+  </div>
 
-<p>
-    <strong><?= htmlspecialchars($pergunta["enunciado"]) ?></strong>
-</p>
+</div>
 
-<?php if ($resultado === null): ?>
-
-    <form method="POST">
-
-        <input type="hidden" name="id" value="<?= htmlspecialchars($pergunta["id"]) ?>">
-
-        <p>
-            <label>
-                <input type="radio" name="resposta" value="1" required>
-                <?= htmlspecialchars($pergunta["alt1"]) ?>
-            </label>
-        </p>
-
-        <p>
-            <label>
-                <input type="radio" name="resposta" value="2">
-                <?= htmlspecialchars($pergunta["alt2"]) ?>
-            </label>
-        </p>
-
-        <p>
-            <label>
-                <input type="radio" name="resposta" value="3">
-                <?= htmlspecialchars($pergunta["alt3"]) ?>
-            </label>
-        </p>
-
-        <p>
-            <label>
-                <input type="radio" name="resposta" value="4">
-                <?= htmlspecialchars($pergunta["alt4"]) ?>
-            </label>
-        </p>
-
-        <button type="submit" name="responder">
-            Responder
-        </button>
-
-    </form>
-
-<?php else: ?>
-
-    <form method="POST">
-        <button type="submit" name="proxima">
-            Próxima pergunta
-        </button>
-    </form>
-
-<?php endif; ?>
-
-</body>
-</html>
+<?php require_once __DIR__ . '/../includes/footer.php'; ?>
