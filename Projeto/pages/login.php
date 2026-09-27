@@ -6,7 +6,7 @@ if (!empty($_SESSION['usuario_id'])) {
     header('Location: index.php');
     exit;
 }
-
+require_once __DIR__ . '/../pages/index.php'; 
 require_once __DIR__ . '/../config/database.php'; 
 require_once __DIR__ . '/../repository/UsuarioRepository.php';
 
