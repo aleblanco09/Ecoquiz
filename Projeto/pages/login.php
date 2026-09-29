@@ -6,41 +6,52 @@ if (!empty($_SESSION['usuario_id'])) {
     header('Location: index.php');
     exit;
 }
-require_once __DIR__ . '/../pages/index.php'; 
-require_once __DIR__ . '/../config/database.php'; 
+
+require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../repository/UsuarioRepository.php';
 
 $erro = '';
 $emailFormulario = $_POST['email'] ?? '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
     $email = trim($_POST['email'] ?? '');
     $senha = $_POST['senha'] ?? '';
 
     if ($email === '' || $senha === '') {
+
         $erro = 'Preencha todos os campos para continuar.';
+
     } else {
-        $repo    = new UsuarioRepository();
+
+        $repo = new UsuarioRepository();
         $usuario = $repo->buscarPorEmail($email);
 
         if ($usuario && hash('sha256', $senha) === $usuario->getSenha()) {
-            
+
             if ($usuario->getContaAtiva() === 0) {
+
                 $erro = 'Sua conta ainda não foi ativada. Verifique as instruções enviadas para o seu e-mail.';
+
             } else {
-                $_SESSION['usuario_id']   = $usuario->getId();
+
+                $_SESSION['usuario_id'] = $usuario->getId();
                 $_SESSION['usuario_nome'] = $usuario->getNome();
 
                 header('Location: index.php');
                 exit;
             }
-            
+
         } else {
+
             $erro = 'E-mail ou senha incorretos.';
         }
     }
 }
+
 ?>
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>

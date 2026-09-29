@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../pages/login.php';
+
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../includes/header.php';
@@ -17,26 +17,38 @@ $stmtUserStats = $pdo->prepare("
     FROM ambiental_resultados 
     WHERE usuario_id = :usuario_id
 ");
-$stmtUserStats->execute([':usuario_id' => $usuarioId]);
+
+$stmtUserStats->execute([
+    ':usuario_id' => $usuarioId
+]);
+
 $minhasEstatisticas = $stmtUserStats->fetch();
 
 $stmtPosicao = $pdo->query("
-    SELECT u.id, ROUND(AVG(r.pontuacao)) AS media
+    SELECT 
+        u.id, 
+        ROUND(AVG(r.pontuacao)) AS media
     FROM ambiental_usuarios u
-    INNER JOIN ambiental_resultados r ON u.id = r.usuario_id
+    INNER JOIN ambiental_resultados r 
+        ON u.id = r.usuario_id
     GROUP BY u.id
     ORDER BY media DESC, SUM(r.acertos) DESC
 ");
+
 $rankingGeral = $stmtPosicao->fetchAll();
 
 $posicaoRanking = '-';
+
 foreach ($rankingGeral as $index => $pos) {
+
     if ($pos['id'] == $usuarioId) {
         $posicaoRanking = ($index + 1) . 'º';
         break;
     }
 }
+
 ?>
+
 
 <div class="page-header">
   <div>
