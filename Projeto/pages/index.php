@@ -139,7 +139,8 @@ $temas = $repo->listarTemas();?>
           
             
             
-            <?php echo "Nome:".$tema->getNomeTema()."<br>"?>
+            
+            <a href="responder.php?id=<?= $tema->getIdTema() ?>"><?=$tema->getNomeTema()?></a>
             <?= "<br><br>";?>
         <?php endforeach; ?>
 <!DOCTYPE html>

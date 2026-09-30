@@ -3,7 +3,7 @@
     private string $nome;
     
     public function __construct(array $dados) {
-        $this->id = (int) ($dados['id_tema'] ?? 0);
+        $this->id = (int) ($dados['id'] ?? 0);
         $this->nome = $dados['nome'] ?? '';
     }
 
