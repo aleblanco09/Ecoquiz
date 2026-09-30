@@ -20,6 +20,4 @@ class TemaRepository {
         }
         return $lista;
     }
-
-        return null;
-    }
+}
