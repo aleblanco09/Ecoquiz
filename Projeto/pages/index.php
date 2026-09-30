@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../includes/auth.php';
+/*require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../includes/header.php';
 
@@ -125,5 +125,18 @@ foreach ($rankingGeral as $index => $pos) {
   </div>
 
 </div>
+<?php require_once __DIR__ . '/../includes/footer.php'; ?>*/?>
 
-<?php require_once __DIR__ . '/../includes/footer.php'; ?>
+
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Página principal</title>
+</head>
+<body>
+<a href="logout.php">Sair</a>
+</body>
+</html>
