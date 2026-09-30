@@ -127,8 +127,21 @@ foreach ($rankingGeral as $index => $pos) {
 </div>
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>*/?>
 
-
-
+<?php
+require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../repository/TemaRepository.php';
+$nomeUser = $_SESSION['usuario_nome'];
+echo "<h1>".$nomeUser."</h1>";
+$repo = new LivroRepository();
+$temas = $repo->listarLivros();?>
+<h2>Temas</h2>
+<?php foreach ($temas as $tema): ?>
+          
+            
+            
+            <?php echo "Nome:".$livro->getNomeLivro()."<br>"?>
+            <?= "<br><br>";?>
+        <?php endforeach; ?>
 <!DOCTYPE html>
 <html lang="pt">
 <head>
