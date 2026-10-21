@@ -11,7 +11,7 @@ $temas = $repo->listarTemas();?>
             
             
             
-            <a href="responder.php?id=<?= $tema->getIdTema() ?>"><?=$tema->getNomeTema()?></a>
+            <a href="iniciar.php?id=<?= $tema->getIdTema() ?>"><?=$tema->getNomeTema()?></a>
             <?= "<br><br>";?>
         <?php endforeach; ?>
 <!DOCTYPE html>
