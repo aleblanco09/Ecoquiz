@@ -1,28 +1,27 @@
 <?php
 
-
 class Questao {
 
-    private int    $id;
+    private int $id;
     private int $temaId;
     private string $enunciado;
-    private int $nivel;
+    private string $nivel; // alterado para string pois o campo enum do banco vem como texto (facil/medio/dificil)
     private int $pontos;
     private string $explicacao;
 
     public function __construct(array $dados) {
         $this->id = (int) ($dados['id'] ?? 0);
-        $this->temaId = $dados['temaid'] ?? '';
+        $this->temaId = (int) ($dados['tema_id'] ?? 0);
         $this->enunciado = $dados['enunciado'] ?? '';
         $this->nivel = $dados['nivel'] ?? '';
-        $this->pontos = $dados['pontos'] ?? '';
+        $this->pontos = (int) ($dados['pontos'] ?? 0);
         $this->explicacao = $dados['explicacao'] ?? '';
     }
 
-    public function getId():       int    { return $this->id; }
-    public function getTemaId():     int { return $this->temaId; }
-    public function getEnunciado():    string { return $this->enunciado; }
-    public function getNivel():    int { return $this->nivel; }
-    public function getPontos(): int{return $this->enunciado}
-    public function getExplicacao(): string{return $this->explicacao}
+    public function getId(): int { return $this->id; }
+    public function getTemaId(): int { return $this->temaId; }
+    public function getEnunciado(): string { return $this->enunciado; }
+    public function getNivel(): string { return $this->nivel; }
+    public function getPontos(): int { return $this->pontos; } // corrigido para retornar os pontos e com ponto e vírgula
+    public function getExplicacao(): string { return $this->explicacao; } // adicionado ponto e vírgula em falta
 }
