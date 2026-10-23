@@ -1,9 +1,9 @@
 <?php
 
 require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/../entity/Pergunta.php';
+require_once __DIR__ . '/../entity/questao.php';
 
-class PerguntaRepository
+class QuestaoRepository
 {
     private PDO $pdo;
 
@@ -12,18 +12,18 @@ class PerguntaRepository
         $this->pdo = $pdo;
     }
 
-    public function buscarAleatorias(?int $categoriaId = null, int $limite = 10): array
+    public function buscarAleatorias(?int $temaId = null, int $limite = 10): array
     {
-        if ($categoriaId !== null) {
+        if ($temaId !== null) {
             $stmt = $this->pdo->prepare("
-                SELECT * FROM ambiental_perguntas 
-                WHERE categoria_id = :categoria_id 
+                SELECT * FROM questoes 
+                WHERE tema_id = :tema_id 
                 ORDER BY RAND() LIMIT :limite
             ");
-            $stmt->bindValue(':categoria_id', $categoriaId, PDO::PARAM_INT);
+            $stmt->bindValue(':tema_id', $temaId, PDO::PARAM_INT);
         } else {
             $stmt = $this->pdo->prepare("
-                SELECT * FROM ambiental_perguntas 
+                SELECT * FROM questoes 
                 ORDER BY RAND() LIMIT :limite
             ");
         }
@@ -32,33 +32,23 @@ class PerguntaRepository
         $stmt->execute();
         $dados = $stmt->fetchAll();
 
-        $perguntas = [];
+        $questoes = [];
         foreach ($dados as $d) {
-            $perguntas[] = new Pergunta(
-                (int)$d['id'],
-                $d['categoria_id'] ? (int)$d['categoria_id'] : null,
-                $d['enunciado'],
-                $d['opcao_a'],
-                $d['opcao_b'],
-                $d['opcao_c'],
-                $d['opcao_d'],
-                $d['resposta_correta']
-            );
+            $questoes[] = new Questao($d);
         }
 
-        return $perguntas;
+        return $questoes;
     }
 
-    public function buscarGabaritoPorIds(array $ids): array
+    public function buscarAlternativasPorQuestao(int $questaoId): array
     {
-        if (empty($ids)) {
-            return [];
-        }
-
-        $inClause = implode(',', array_fill(0, count($ids), '?'));
-        $stmt = $this->pdo->prepare("SELECT id, resposta_correta FROM ambiental_perguntas WHERE id IN ($inClause)");
-        $stmt->execute($ids);
-
-        return $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+        $stmt = $this->pdo->prepare("
+            SELECT * FROM alternativas 
+            WHERE questao_id = :questao_id 
+            ORDER BY letra ASC
+        ");
+        $stmt->bindValue(':questao_id', $questaoId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll();
     }
 }
