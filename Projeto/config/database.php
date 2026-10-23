@@ -11,7 +11,9 @@ class Database
 
     public function getConnection(): PDO
     {
-        $this->conn = null;
+        if ($this->conn !== null) {
+            return $this->conn;
+        }
 
         try {
             $dsn = "mysql:host=" . $this->host . ";dbname=" . $this->db_name . ";charset=" . $this->charset;
@@ -21,8 +23,9 @@ class Database
                 PDO::ATTR_EMULATE_PREPARES   => false,
             ];
             $this->conn = new PDO($dsn, $this->username, $this->password, $options);
-        } catch(PDOException $exception) {
-            echo "Erro de conexão: " . $exception->getMessage();
+        } catch (PDOException $exception) {
+            
+            throw new Exception("Erro de conexão: " . $exception->getMessage());
         }
 
         return $this->conn;
