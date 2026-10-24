@@ -22,5 +22,10 @@ class UsuarioRepository {
         }
 
         return null;
-    }}
+    }
+    public function criarUsuario(string $email, string $senha,string $nome){
+        $stmt = $this->pdo->prepare('INSERT INTO usuarios (email,senha,nome) VALUES (:email,:senha,:nomeU)');
+        $stmt->execute([':email'=>$email,':senha'=>$senha,':nomeU'=>$nome]);
+    }
+    }
     

@@ -5,7 +5,7 @@ class Questao {
     private int $id;
     private int $temaId;
     private string $enunciado;
-    private string $nivel; // alterado para string pois o campo enum do banco vem como texto (facil/medio/dificil)
+    private string $nivel; 
     private int $pontos;
     private string $explicacao;
 
@@ -22,6 +22,6 @@ class Questao {
     public function getTemaId(): int { return $this->temaId; }
     public function getEnunciado(): string { return $this->enunciado; }
     public function getNivel(): string { return $this->nivel; }
-    public function getPontos(): int { return $this->pontos; } // corrigido para retornar os pontos e com ponto e vírgula
-    public function getExplicacao(): string { return $this->explicacao; } // adicionado ponto e vírgula em falta
+    public function getPontos(): int { return $this->pontos; } 
+    public function getExplicacao(): string { return $this->explicacao; } 
 }

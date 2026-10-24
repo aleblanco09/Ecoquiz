@@ -5,7 +5,7 @@ class Usuario {
     private int    $id;
     private string $nome;
     private string $senha;
-    private string    $email;
+    private string $email;
 
     public function __construct(array $dados) {
         $this->id         = (int) ($dados['id']           ?? 0);
