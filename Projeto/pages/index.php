@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../repository/TemaRepository.php';
 $nomeUser = $_SESSION['usuario_nome'];
-echo "<h1>".$nomeUser."</h1>";
+echo "<h1>$nomeUser</h1>";
 $repo = new TemaRepository();
 $temas = $repo->listarTemas();?>
 <h2>Temas</h2>
