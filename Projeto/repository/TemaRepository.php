@@ -20,4 +20,20 @@ class TemaRepository {
         }
         return $lista;
     }
+    public function buscarPorId(int $id): ?Tema {
+    $stmt = $this->pdo->prepare(
+        'SELECT * FROM temas WHERE id = :id'
+    );
+
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $dados = $stmt->fetch();
+
+    if (!$dados) {
+        return null;
+    }
+
+    return new Tema($dados);
+}
 }
