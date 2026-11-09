@@ -20,6 +20,7 @@ $tema = $repo->buscarPorId($id);
 if (!$tema || $tema->getIdTema() != $id) {
     exit("Tema não encontrado.");
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -40,7 +41,7 @@ if (!$tema || $tema->getIdTema() != $id) {
             Deseja iniciar o quiz sobre <?=$tema->getNomeTema()?>?
 </label>
         <br><br>
-        <button type="submit" name="iniciar">Iniciar</button></form>
+        <button type="submit" name="iniciar" value="<?=$tema->getIdTema()?>">Iniciar</button></form>
     
 <form action="iniciar.php" method="post">
 <button type="submit" name="voltar">Voltar</button> </form>

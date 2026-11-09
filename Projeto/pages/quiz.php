@@ -2,8 +2,8 @@
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../repository/QuestaoRepository.php';
 
-if (isset($_POST['id'])) {
-    $id = (int) $_POST['id'];
+if (isset($_POST['iniciar'])) {
+    $id = (int) $_POST['iniciar'];
 } else {
     exit("Tema não informado.");
 }
