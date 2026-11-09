@@ -41,7 +41,5 @@ $temas = $repo->listarTemas();
 
     </div>
 
-    <a href="logout.php">Sair</a>
-
 </body>
 </html>
