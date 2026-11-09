@@ -1,7 +1,7 @@
-
 <?php
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../repository/TemaRepository.php';
+require_once __DIR__ . '/../includes/header.php';
 
 $nomeUser = $_SESSION['usuario_nome'];
 
@@ -15,30 +15,31 @@ $temas = $repo->listarTemas();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página principal</title>
+
+    <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
 
-    <h1><?=$nomeUser?></h1>
+    
 
     <h2>Temas</h2>
 
-    <?php foreach ($temas as $tema): ?>
+    <div class="temas">
 
-        <a href="iniciar.php?id=<?=$tema->getIdTema()?>">
+        <?php foreach ($temas as $tema): ?>
 
-            <img src="<?=$tema->getCapa()?>" 
-                 alt="<?=$tema->getNomeTema()?>" 
-                 width="200">
+            <a class="tema" href="iniciar.php?id=<?=$tema->getIdTema()?>">
 
-            <br>
+                <img src="<?=$tema->getCapa()?>" 
+                     alt="<?=$tema->getNomeTema()?>">
 
-            <?=$tema->getNomeTema()?>
+                <p><?=$tema->getNomeTema()?></p>
 
-        </a>
+            </a>
 
-        <br><br>
+        <?php endforeach; ?>
 
-    <?php endforeach; ?>
+    </div>
 
     <a href="logout.php">Sair</a>
 
