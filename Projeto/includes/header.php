@@ -1,6 +1,6 @@
 <header class="header">
-
-    <h2 class="logo">EcoQuiz</h2>
+<link rel="stylesheet" href="../assets/style.css" />
+    <h2 class="logo">Ecoquiz</h2>
 
     <div class="header-user">
 
