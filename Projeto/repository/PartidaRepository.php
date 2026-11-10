@@ -1,3 +1,4 @@
+
 <?php
 
 require_once __DIR__ . '/../config/database.php';
@@ -22,5 +23,34 @@ class PartidaRepository {
         }
 
         return $lista;
+    }
+
+    public function criarPartida(int $usuarioId): int {
+        $stmt = $this->pdo->prepare(
+            'INSERT INTO partidas (usuario_id, inicio)
+             VALUES (:usuario_id, NOW())'
+        );
+
+        $stmt->bindValue(':usuario_id', $usuarioId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return (int) $this->pdo->lastInsertId();
+    }
+
+    public function finalizarPartida(int $id, int $pontuacao, int $tempo): void {
+        $stmt = $this->pdo->prepare(
+            'UPDATE partidas
+             SET fim = NOW(),
+                 tempo_segundos = :tempo,
+                 pontuacao_total = :pontuacao,
+                 concluida = 1
+             WHERE id = :id'
+        );
+
+        $stmt->bindValue(':tempo', $tempo, PDO::PARAM_INT);
+        $stmt->bindValue(':pontuacao', $pontuacao, PDO::PARAM_INT);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+
+        $stmt->execute();
     }
 }
