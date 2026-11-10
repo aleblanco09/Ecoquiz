@@ -46,11 +46,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div class="login-card">
 
-        <h1>EcoQuiz</h1>
+        <h1>Ecoquiz</h1>
 
-        <p class="login-subtitulo">Aprenda, descubra e preserve!</p>
+        
 
-        <h2>Login</h2>
+        <h2>Iniciar sessão</h2>
 
         <?php if ($erro !== ''): ?>
             <h3 class="login-erro"><?=htmlspecialchars($erro)?></h3>
@@ -59,17 +59,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form method="POST" action="login.php">
 
             <label>E-mail</label>
-            <input type="email" name="email" placeholder="Digite seu e-mail" required>
+            <input type="email" name="email" placeholder="Digite seu e-mail" >
 
             <label>Senha</label>
-            <input type="password" name="senha" placeholder="Digite sua senha" required>
+            <input type="password" name="senha" placeholder="Digite sua senha" >
 
             <button type="submit">Entrar</button>
 
         </form>
 
         <p class="login-cadastro">
-            Ainda não tem uma conta?
+            
             <a href="cadastrar.php">Criar nova conta</a>
         </p>
 
