@@ -27,5 +27,49 @@ class UsuarioRepository {
         $stmt = $this->pdo->prepare('INSERT INTO usuarios (email,senha,nome) VALUES (:email,:senha,:nomeU)');
         $stmt->execute([':email'=>$email,':senha'=>$senha,':nomeU'=>$nome]);
     }
+
+
+public function listarRanking(): array {
+
+    $stmt = $this->pdo->prepare(
+        'SELECT 
+            usuarios.id AS usuario_id,
+            usuarios.nome,
+            partidas.pontuacao_total,
+            partidas.tempo_segundos
+         FROM partidas
+         INNER JOIN usuarios
+            ON usuarios.id = partidas.usuario_id
+         WHERE partidas.concluida = 1
+         AND partidas.tempo_segundos IS NOT NULL
+         ORDER BY
+            partidas.pontuacao_total DESC,
+            partidas.tempo_segundos ASC,
+            usuarios.nome ASC,
+            partidas.id ASC'
+    );
+
+    $stmt->execute();
+
+    $partidas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $ranking = [];
+    $usuariosAdicionados = [];
+
+    foreach ($partidas as $partida) {
+
+        $id = (int) $partida['usuario_id'];
+
+        // Adiciona somente a melhor partida de cada usuário
+        if (!isset($usuariosAdicionados[$id])) {
+
+            $ranking[] = $partida;
+            $usuariosAdicionados[$id] = true;
+        }
+    }
+
+    return $ranking;
+}
+
     }
     
