@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 05/11/2026 às 03:52
+-- Tempo de geração: 11/11/2026 às 21:47
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -657,6 +657,19 @@ CREATE TABLE `partidas` (
   `concluida` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Despejando dados para a tabela `partidas`
+--
+
+INSERT INTO `partidas` (`id`, `usuario_id`, `inicio`, `fim`, `tempo_segundos`, `pontuacao_total`, `concluida`) VALUES
+(1, 1, '2026-11-10 16:17:44', '2026-11-10 16:20:30', 166, 17, 1),
+(2, 1, '2026-11-10 16:35:39', '2026-11-10 16:37:06', 87, 30, 1),
+(3, 3, '2026-11-10 16:38:47', '2026-11-10 16:39:37', 50, 14, 1),
+(4, 3, '2026-11-10 16:46:07', '2026-11-10 16:47:16', 69, 5, 1),
+(5, 1, '2026-11-10 21:54:37', '2026-11-10 21:56:31', 114, 20, 1),
+(6, 3, '2026-11-10 22:18:19', NULL, NULL, 0, 0),
+(7, 1, '2026-11-10 22:50:17', NULL, NULL, 0, 0);
+
 -- --------------------------------------------------------
 
 --
@@ -843,6 +856,87 @@ CREATE TABLE `respostas_usuario` (
   `pontos_ganhos` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Despejando dados para a tabela `respostas_usuario`
+--
+
+INSERT INTO `respostas_usuario` (`id`, `partida_id`, `questao_id`, `tentativas`, `acertou`, `pontos_ganhos`) VALUES
+(1, 1, 31, 1, 0, 0),
+(2, 1, 32, 1, 1, 1),
+(3, 1, 33, 1, 1, 1),
+(4, 1, 34, 1, 0, 0),
+(5, 1, 35, 1, 0, 0),
+(6, 1, 36, 1, 0, 0),
+(7, 1, 37, 1, 0, 0),
+(8, 1, 38, 1, 0, 0),
+(9, 1, 39, 1, 1, 5),
+(10, 1, 40, 1, 0, 0),
+(11, 1, 41, 1, 0, 0),
+(12, 1, 42, 1, 0, 0),
+(13, 1, 43, 1, 1, 10),
+(14, 1, 44, 1, 0, 0),
+(15, 1, 45, 1, 0, 0),
+(16, 2, 76, 1, 0, 0),
+(17, 2, 77, 1, 0, 0),
+(18, 2, 78, 1, 0, 0),
+(19, 2, 79, 1, 0, 0),
+(20, 2, 80, 1, 0, 0),
+(21, 2, 81, 1, 0, 0),
+(22, 2, 82, 1, 0, 0),
+(23, 2, 83, 1, 0, 0),
+(24, 2, 84, 1, 1, 5),
+(25, 2, 85, 1, 1, 5),
+(26, 2, 86, 1, 0, 0),
+(27, 2, 87, 1, 0, 0),
+(28, 2, 88, 1, 0, 0),
+(29, 2, 89, 1, 1, 10),
+(30, 2, 90, 1, 1, 10),
+(31, 3, 76, 1, 1, 1),
+(32, 3, 77, 1, 1, 1),
+(33, 3, 78, 1, 0, 0),
+(34, 3, 79, 1, 1, 1),
+(35, 3, 80, 1, 1, 1),
+(36, 3, 81, 1, 0, 0),
+(37, 3, 82, 1, 0, 0),
+(38, 3, 83, 1, 0, 0),
+(39, 3, 84, 1, 0, 0),
+(40, 3, 85, 1, 0, 0),
+(41, 3, 86, 1, 0, 0),
+(42, 3, 87, 1, 0, 0),
+(43, 3, 88, 1, 1, 10),
+(44, 3, 89, 1, 0, 0),
+(45, 3, 90, 1, 0, 0),
+(46, 4, 61, 1, 0, 0),
+(47, 4, 62, 1, 0, 0),
+(48, 4, 63, 1, 0, 0),
+(49, 4, 64, 1, 0, 0),
+(50, 4, 65, 1, 0, 0),
+(51, 4, 66, 1, 1, 5),
+(52, 4, 67, 1, 0, 0),
+(53, 4, 68, 1, 0, 0),
+(54, 4, 69, 1, 0, 0),
+(55, 4, 70, 1, 0, 0),
+(56, 4, 71, 1, 0, 0),
+(57, 4, 72, 1, 0, 0),
+(58, 4, 73, 1, 0, 0),
+(59, 4, 74, 1, 0, 0),
+(60, 4, 75, 1, 0, 0),
+(61, 5, 61, 1, 0, 0),
+(62, 5, 62, 1, 0, 0),
+(63, 5, 63, 1, 0, 0),
+(64, 5, 64, 1, 0, 0),
+(65, 5, 65, 1, 0, 0),
+(66, 5, 66, 1, 0, 0),
+(67, 5, 67, 1, 1, 5),
+(68, 5, 68, 1, 0, 0),
+(69, 5, 69, 1, 0, 0),
+(70, 5, 70, 1, 1, 5),
+(71, 5, 71, 1, 0, 0),
+(72, 5, 72, 1, 0, 0),
+(73, 5, 73, 1, 0, 0),
+(74, 5, 74, 1, 1, 10),
+(75, 5, 75, 1, 0, 0);
+
 -- --------------------------------------------------------
 
 --
@@ -851,24 +945,25 @@ CREATE TABLE `respostas_usuario` (
 
 CREATE TABLE `temas` (
   `id` int(11) NOT NULL,
-  `nome` varchar(100) NOT NULL
+  `nome` varchar(100) NOT NULL,
+  `capa` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `temas`
 --
 
-INSERT INTO `temas` (`id`, `nome`) VALUES
-(1, 'Curiosidades da Natureza'),
-(2, 'Energias Renováveis'),
-(3, 'Água Doce e Oceanos'),
-(4, 'Consumo Consciente e Pegada de Carbono'),
-(5, 'Reciclagem'),
-(6, 'Desastres Ambientais'),
-(7, 'Mudanças Climáticas'),
-(8, 'Biomas do Brasil'),
-(9, 'Animais em Extinção'),
-(10, 'Cálculos de Impacto Ambiental');
+INSERT INTO `temas` (`id`, `nome`, `capa`) VALUES
+(1, 'Curiosidades da Natureza', '../uploads/tema1.jpg'),
+(2, 'Energias Renováveis', '../uploads/tema2.jpg'),
+(3, 'Água Doce e Oceanos', '../uploads/tema3.jpg'),
+(4, 'Consumo Consciente e Pegada de Carbono', '../uploads/tema4.jpg'),
+(5, 'Reciclagem', '../uploads/tema5.jpg'),
+(6, 'Desastres Ambientais', '../uploads/tema6.jpg'),
+(7, 'Mudanças Climáticas', '../uploads/tema7.jpg'),
+(8, 'Biomas do Brasil', '../uploads/tema8.jpg'),
+(9, 'Animais em Extinção', '../uploads/tema9.jpg'),
+(10, 'Cálculos de Impacto Ambiental', '../uploads/tema10.jpg');
 
 -- --------------------------------------------------------
 
@@ -890,7 +985,10 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`id`, `nome`, `email`, `criado_em`, `senha`) VALUES
 (1, 'adm', 'adm@email.com', '2026-09-29 01:15:44', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92'),
-(2, 'Teste', 'teste@email.com', '2026-10-24 21:44:21', '16b2027f8f3bd5615ff9af70655aa51d9a535f595d4981b9978661293f5d9c92');
+(2, 'Teste', 'teste@email.com', '2026-10-24 21:44:21', '16b2027f8f3bd5615ff9af70655aa51d9a535f595d4981b9978661293f5d9c92'),
+(3, 'Zezin', 'zezin@email.com', '2026-11-10 19:38:34', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92'),
+(4, 'Guest', 'Teste definitivo', '2026-11-11 01:58:59', '39746bf6458974659ea632a8f5b03f0be3f9a15c4a7db25c1c0493dc9397a9e8'),
+(5, 'Guest', 'abc@email.com', '2026-11-11 02:00:16', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92');
 
 --
 -- Índices para tabelas despejadas
@@ -952,7 +1050,7 @@ ALTER TABLE `alternativas`
 -- AUTO_INCREMENT de tabela `partidas`
 --
 ALTER TABLE `partidas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de tabela `questoes`
@@ -964,7 +1062,7 @@ ALTER TABLE `questoes`
 -- AUTO_INCREMENT de tabela `respostas_usuario`
 --
 ALTER TABLE `respostas_usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
 
 --
 -- AUTO_INCREMENT de tabela `temas`
@@ -976,7 +1074,7 @@ ALTER TABLE `temas`
 -- AUTO_INCREMENT de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Restrições para tabelas despejadas
