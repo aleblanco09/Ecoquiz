@@ -167,13 +167,13 @@ if (isset($_POST['proxima']) && $estado['respondida']) {
             $tempo
         );
 
-        // Guarda os dados para a página de resultado
         $_SESSION['quiz_resultado'] = [
-            'pontuacao' => $estado['pontuacao'],
-            'pontuacao_maxima' => $pontuacaoMaxima,
-            'total_questoes' => count($questoes),
-            'tempo' => $tempo
-        ];
+    'pontuacao' => $estado['pontuacao'],
+    'pontuacao_maxima' => $pontuacaoMaxima,
+    'total_questoes' => count($questoes),
+    'tempo' => $tempo,
+    'tema_id' => $estado['tema_id']
+];
 
         unset($_SESSION['quiz']);
 

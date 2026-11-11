@@ -3,7 +3,6 @@
 
 require_once __DIR__ . '/../includes/auth.php';
 
-// Verifica se existe um resultado disponível
 if (!isset($_SESSION['quiz_resultado'])) {
     header('Location: index.php');
     exit;
@@ -15,6 +14,7 @@ $pontuacao = $resultado['pontuacao'];
 $pontuacaoMaxima = $resultado['pontuacao_maxima'];
 $totalQuestoes = $resultado['total_questoes'];
 $tempo = $resultado['tempo'];
+$temaId = $resultado['tema_id'];
 
 ?>
 
@@ -24,7 +24,7 @@ $tempo = $resultado['tempo'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultado - EcoQuiz</title>
-    
+
     <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -54,8 +54,14 @@ $tempo = $resultado['tempo'];
                 <?=$tempo % 60?> segundos
             </p>
 
-            <a href="index.php">Voltar aos temas</a>
-<a href="ranking.php">Ver ranking</a>
+            <a href="ranking.php?tema_id=<?=$temaId?>">
+                Ver ranking deste tema
+            </a>
+
+            <p>
+                <a href="index.php">Voltar aos temas</a>
+            </p>
+
         </div>
 
     </main>
