@@ -52,7 +52,7 @@ if (!$tema || $tema->getIdTema() != $id) {
 
         <form action="ranking.php" method="GET">
             <button type="submit" name="tema_id" value="<?=$tema->getIdTema()?>">
-                Ver ranking
+                Ver Classificação
             </button>
         </form>
 

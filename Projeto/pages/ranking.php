@@ -5,14 +5,14 @@ require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../repository/UsuarioRepository.php';
 require_once __DIR__ . '/../repository/TemaRepository.php';
 require_once __DIR__ . '/../includes/header.php';
-// Recebe o ID do tema
+
 $temaId = filter_input(INPUT_GET, 'tema_id', FILTER_VALIDATE_INT);
 
 if (!$temaId || $temaId < 1) {
     exit("Tema não informado.");
 }
 
-// Busca o tema
+
 $repoTema = new TemaRepository();
 $tema = $repoTema->buscarPorId($temaId);
 
@@ -20,7 +20,7 @@ if (!$tema) {
     exit("Tema não encontrado.");
 }
 
-// Busca o ranking daquele tema
+
 $repo = new UsuarioRepository();
 $ranking = $repo->listarRankingPorTema($temaId);
 
@@ -31,11 +31,11 @@ $ranking = $repo->listarRankingPorTema($temaId);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ranking - EcoQuiz</title>
+    <title>Ranking - Ecoquiz</title>
 </head>
 <body>
 
-    <h1>Ranking - <?=$tema->getNomeTema()?></h1>
+    <h1>Classificação - <?=$tema->getNomeTema()?></h1>
 
     <?php if (count($ranking) == 0): ?>
 

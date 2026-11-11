@@ -14,7 +14,6 @@ $repoResposta = new RespostaUsuarioRepository();
 
 $usuarioId = (int) $_SESSION['usuario_id'];
 
-// Inicia uma nova partida
 if (!isset($_SESSION['quiz'])) {
 
     if (!isset($_POST['iniciar'])) {
@@ -72,7 +71,6 @@ if (empty($alternativas)) {
 
 $erro = '';
 
-// Recebe a resposta do usuário
 if (isset($_POST['responder']) && !$estado['respondida']) {
 
     $idAlternativa = filter_var(
@@ -119,7 +117,6 @@ if (isset($_POST['responder']) && !$estado['respondida']) {
     }
 }
 
-// Identifica a alternativa correta
 $alternativaCorreta = null;
 
 foreach ($alternativas as $alternativa) {
@@ -130,7 +127,6 @@ foreach ($alternativas as $alternativa) {
     }
 }
 
-// Avança para a próxima questão
 if (isset($_POST['proxima']) && $estado['respondida']) {
 
     if ($indice + 1 < count($questoes)) {
@@ -150,17 +146,14 @@ if (isset($_POST['proxima']) && $estado['respondida']) {
 
     } else {
 
-        // Calcula a pontuação máxima
         $pontuacaoMaxima = 0;
 
         foreach ($questoes as $q) {
             $pontuacaoMaxima += $q->getPontos();
         }
 
-        // Calcula o tempo da partida
         $tempo = time() - $estado['inicio_timestamp'];
 
-        // Finaliza a partida no banco
         $repoPartida->finalizarPartida(
             $estado['partida_id'],
             $estado['pontuacao'],
@@ -189,7 +182,7 @@ if (isset($_POST['proxima']) && $estado['respondida']) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoQuiz - Quiz</title>
+    <title>Ecoquiz - Quiz</title>
 
     <link rel="stylesheet" href="../assets/style.css">
 </head>

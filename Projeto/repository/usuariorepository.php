@@ -91,7 +91,6 @@ class UsuarioRepository {
 
             $id = (int) $partida['usuario_id'];
 
-            // Adiciona somente a melhor partida de cada usuário
             if (!isset($usuariosAdicionados[$id])) {
 
                 $ranking[] = $partida;

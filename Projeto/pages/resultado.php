@@ -23,7 +23,7 @@ $temaId = $resultado['tema_id'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resultado - EcoQuiz</title>
+    <title>Resultado - Ecoquiz</title>
 
     <link rel="stylesheet" href="../assets/style.css">
 </head>
@@ -55,7 +55,7 @@ $temaId = $resultado['tema_id'];
             </p>
 
             <a href="ranking.php?tema_id=<?=$temaId?>">
-                Ver ranking deste tema
+                Ver classificação deste tema
             </a>
 
             <p>
