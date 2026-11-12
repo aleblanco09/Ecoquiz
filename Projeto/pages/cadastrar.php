@@ -1,7 +1,8 @@
 <?php
 require_once __DIR__ . '/../repository/UsuarioRepository.php';
 $repo=new UsuarioRepository();
-if(isset($_POST['email']) || isset($_POST['senha']) || isset($_POST['nomeUsuario']))
+
+if(isset($_POST['email']) && isset($_POST['senha']) && isset($_POST['nomeUsuario']))
     {
         $email=$_POST['email'];
         $senhaNormal=$_POST['senha'];
@@ -11,6 +12,7 @@ if(isset($_POST['email']) || isset($_POST['senha']) || isset($_POST['nomeUsuario
         header('Location: index.php');
         exit;
     }
+
 ?>
 <!DOCTYPE html>
 <html lang="pt">
