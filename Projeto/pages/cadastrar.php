@@ -22,9 +22,9 @@ if(isset($_POST['email']) || isset($_POST['senha']) || isset($_POST['nomeUsuario
 <body>
     <h2>Criar conta:</h2>
     <form action="cadastrar.php" method="POST">
-<p>E-mail:</p><input type="text" name="email" required/>
+<p>E-mail:</p><input type="email" name="email" required/>
 <p>Senha:</p><input type="text" name="senha" required/>
-<p>Nome:</p><input type="text" name="nomeUsuario" required/>
+<p>Nome:</p><input type="text" name="nomeUsuario" required/><br>
 <button type="submit">Criar</button>
 </form>
 </body>
