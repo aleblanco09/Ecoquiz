@@ -18,10 +18,9 @@
   --border-color: #d1dad4;
   --alert-red: #c93b2b;
   --alert-red-soft: #fdf2f2;
-  --radius: 8px;
+  --radius: 6px;
   --shadow: 0 4px 12px rgba(27, 67, 50, 0.08);
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
-  --transition: all 0.2s ease;
 }
 
 html {
@@ -224,14 +223,13 @@ a:hover {
   font-size: 0.9rem;
   cursor: pointer;
   text-decoration: none;
-  transition: var(--transition);
+  transition: all 0.2s ease;
 }
 
 .btn:hover {
   background-color: var(--sand-beige);
   border-color: var(--muted);
   color: var(--ink);
-  transform: translateY(-1px);
 }
 
 .btn-primary {
