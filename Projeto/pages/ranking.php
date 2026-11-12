@@ -1,87 +1,94 @@
+
 <?php
 
 require_once __DIR__ . '/../includes/auth.php';
-require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../repository/UsuarioRepository.php';
+require_once __DIR__ . '/../repository/TemaRepository.php';
 require_once __DIR__ . '/../includes/header.php';
 
-global $pdo;
+$temaId = filter_input(INPUT_GET, 'tema_id', FILTER_VALIDATE_INT);
 
-$stmt = $pdo->query("
-    SELECT 
-        u.nome,
-        COUNT(r.id) AS total_quizzes,
-        SUM(r.acertos) AS total_acertos,
-        ROUND(AVG(r.pontuacao)) AS media_pontuacao
-    FROM ambiental_usuarios u
-    INNER JOIN ambiental_resultados r ON u.id = r.usuario_id
-    GROUP BY u.id
-    ORDER BY media_pontuacao DESC, total_acertos DESC
-    LIMIT 20
-");
+if (!$temaId || $temaId < 1) {
+    exit("Tema não informado.");
+}
 
-$ranking = $stmt->fetchAll();
+
+$repoTema = new TemaRepository();
+$tema = $repoTema->buscarPorId($temaId);
+
+if (!$tema) {
+    exit("Tema não encontrado.");
+}
+
+
+$repo = new UsuarioRepository();
+$ranking = $repo->listarRankingPorTema($temaId);
+
 ?>
 
-<div class="page-header">
-  <h2>EcoQuiz — Classificação Geral</h2>
-  <a href="quiz.php" class="btn btn-primary">
-    <i class="fa-solid fa-play"></i> Jogar Novamente
-  </a>
-</div>
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ranking - Ecoquiz</title>
+</head>
+<body>
 
-<div class="form-card" style="max-width: 900px; margin: 0 auto;">
-  <p style="color: var(--muted); margin-bottom: 20px; text-align: center;">
-    Acompanhe o desempenho dos colaboradores na conscientização e preservação ambiental.
-  </p>
+    <h1>Classificação - <?=$tema->getNomeTema()?></h1>
 
-  <?php if (empty($ranking)): ?>
-    <div class="empty-state">
-      <p>Nenhum registo de pontuação encontrado até ao momento. Seja o primeiro a responder ao quiz!</p>
-    </div>
-  <?php else: ?>
-    <div class="table-wrapper">
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th style="width: 80px; text-align: center;">Posição</th>
-            <th>Colaborador</th>
-            <th style="text-align: center;">Quizzes Concluídos</th>
-            <th style="text-align: center;">Total de Acertos</th>
-            <th style="text-align: center;">Média Geral</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php foreach ($ranking as $index => $pos): ?>
-            <tr>
-              <td style="text-align: center; font-weight: 700;">
-                <?php if ($index === 0): ?>
-                  <i class="fa-solid fa-trophy" style="color: #f1c40f; font-size: 1.1rem;"></i> 1º
-                <?php elseif ($index === 1): ?>
-                  <i class="fa-solid fa-trophy" style="color: #bdc3c7; font-size: 1.1rem;"></i> 2º
-                <?php elseif ($index === 2): ?>
-                  <i class="fa-solid fa-trophy" style="color: #e67e22; font-size: 1.1rem;"></i> 3º
-                <?php else: ?>
-                  <?= ($index + 1) ?>º
-                <?php endif; ?>
-              </td>
-              <td style="font-weight: 600;">
-                <?= htmlspecialchars($pos['nome']) ?>
-              </td>
-              <td style="text-align: center;">
-                <?= $pos['total_quizzes'] ?>
-              </td>
-              <td style="text-align: center;">
-                <?= $pos['total_acertos'] ?>
-              </td>
-              <td style="text-align: center; font-weight: 700; color: var(--forest-green);">
-                <?= $pos['media_pontuacao'] ?>%
-              </td>
-            </tr>
-          <?php endforeach; ?>
-        </tbody>
-      </table>
-    </div>
-  <?php endif; ?>
-</div>
+    <?php if (count($ranking) == 0): ?>
 
-<?php require_once __DIR__ . '/../includes/footer.php'; ?>
+        <p>Ainda não existem partidas concluídas nesse tema.</p>
+
+    <?php else: ?>
+
+        <table border="1">
+
+            <thead>
+                <tr>
+                    <th>Posição</th>
+                    <th>Usuário</th>
+                    <th>Pontuação</th>
+                    <th>Tempo</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <?php foreach ($ranking as $i => $usuario): ?>
+
+                    <tr>
+                        <td><?=$i + 1?>º</td>
+
+                        <td>
+                            <?=htmlspecialchars($usuario['nome'], ENT_QUOTES, 'UTF-8')?>
+                        </td>
+
+                        <td>
+                            <?=$usuario['pontuacao_total']?> pontos
+                        </td>
+
+                        <td>
+                            <?=sprintf(
+                                '%02d:%02d',
+                                intdiv((int) $usuario['tempo_segundos'], 60),
+                                (int) $usuario['tempo_segundos'] % 60
+                            )?>
+                        </td>
+                    </tr>
+
+                <?php endforeach; ?>
+
+            </tbody>
+
+        </table>
+
+    <?php endif; ?>
+
+    <p>
+        <a href="index.php">Voltar aos temas</a>
+    </p>
+
+</body>
+</html>

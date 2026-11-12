@@ -1,5 +1,7 @@
+
 <?php
 
+require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../entity/Usuario.php';
 
 class UsuarioRepository {
@@ -7,17 +9,17 @@ class UsuarioRepository {
     private PDO $pdo;
 
     public function __construct() {
-        require_once __DIR__ . '/../config/database.php';
-        
-        global $pdo;
-        $this->pdo = $pdo;
+        $this->pdo = getConexao();
     }
 
-   
-    
     public function buscarPorEmail(string $email): ?Usuario {
-        $stmt = $this->pdo->prepare('SELECT * FROM ambiental_usuarios WHERE email = :email LIMIT 1');
+
+        $stmt = $this->pdo->prepare(
+            'SELECT * FROM usuarios WHERE email = :email LIMIT 1'
+        );
+
         $stmt->execute([':email' => $email]);
+
         $dados = $stmt->fetch();
 
         if ($dados) {
@@ -27,18 +29,76 @@ class UsuarioRepository {
         return null;
     }
 
-    
-    public function cadastrar(string $nome, string $email, string $senha, string $tokenAtivacao): bool {
-        $sql = "INSERT INTO ambiental_usuarios (nome, email, senha, token_ativacao, conta_ativa) 
-                VALUES (:nome, :email, :senha, :token_ativacao, 0)";
-                
-        $stmt = $this->pdo->prepare($sql);
-        
-        return $stmt->execute([
-            ':nome'           => $nome,
-            ':email'          => $email,
-            ':senha'          => hash('sha256', $senha),
-            ':token_ativacao' => $tokenAtivacao
+    public function criarUsuario(string $email, string $senha, string $nome) {
+
+        $stmt = $this->pdo->prepare(
+            'INSERT INTO usuarios (email, senha, nome)
+             VALUES (:email, :senha, :nomeU)'
+        );
+
+        $stmt->execute([
+            ':email' => $email,
+            ':senha' => $senha,
+            ':nomeU' => $nome
         ]);
+    }
+
+    public function listarRankingPorTema(int $temaId): array {
+
+        $stmt = $this->pdo->prepare(
+            'SELECT
+                usuarios.id AS usuario_id,
+                usuarios.nome,
+                partidas.id AS partida_id,
+                partidas.pontuacao_total,
+                partidas.tempo_segundos
+
+             FROM partidas
+
+             INNER JOIN usuarios
+                ON usuarios.id = partidas.usuario_id
+
+             WHERE partidas.concluida = 1
+             AND partidas.tempo_segundos IS NOT NULL
+
+             AND EXISTS (
+                SELECT 1
+                FROM respostas_usuario
+
+                INNER JOIN questoes
+                    ON questoes.id = respostas_usuario.questao_id
+
+                WHERE respostas_usuario.partida_id = partidas.id
+                AND questoes.tema_id = :tema_id
+             )
+
+             ORDER BY
+                partidas.pontuacao_total DESC,
+                partidas.tempo_segundos ASC,
+                usuarios.nome ASC,
+                partidas.id ASC'
+        );
+
+        $stmt->bindValue(':tema_id', $temaId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $partidas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $ranking = [];
+        $usuariosAdicionados = [];
+
+        foreach ($partidas as $partida) {
+
+            $id = (int) $partida['usuario_id'];
+
+            if (!isset($usuariosAdicionados[$id])) {
+
+                $ranking[] = $partida;
+
+                $usuariosAdicionados[$id] = true;
+            }
+        }
+
+        return $ranking;
     }
 }

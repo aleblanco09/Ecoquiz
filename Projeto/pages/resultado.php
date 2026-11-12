@@ -1,68 +1,70 @@
+
 <?php
 
 require_once __DIR__ . '/../includes/auth.php';
-require_once __DIR__ . '/../config/database.php';
 
-global $pdo;
-
-$resultadoId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-
-if (!$resultadoId) {
-    header('Location: quiz.php');
+if (!isset($_SESSION['quiz_resultado'])) {
+    header('Location: index.php');
     exit;
 }
 
-$stmt = $pdo->prepare("
-    SELECT r.*, c.nome AS categoria_nome 
-    FROM ambiental_resultados r 
-    LEFT JOIN ambiental_categorias c ON r.categoria_id = c.id 
-    WHERE r.id = :id AND r.usuario_id = :usuario_id
-");
-$stmt->execute([
-    ':id' => $resultadoId,
-    ':usuario_id' => $_SESSION['usuario_id']
-]);
-$resultado = $stmt->fetch();
+$resultado = $_SESSION['quiz_resultado'];
 
-if (!$resultado) {
-    header('Location: quiz.php');
-    exit;
-}
+$pontuacao = $resultado['pontuacao'];
+$pontuacaoMaxima = $resultado['pontuacao_maxima'];
+$totalQuestoes = $resultado['total_questoes'];
+$tempo = $resultado['tempo'];
+$temaId = $resultado['tema_id'];
 
-require_once __DIR__ . '/../includes/header.php';
 ?>
 
-<div class="page-header">
-  <h2>EcoQuiz — Resultado da Avaliação</h2>
-</div>
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado - Ecoquiz</title>
 
-<div class="form-card" style="max-width: 600px; text-align: center;">
-  <div style="margin-bottom: 24px;">
-    <i class="fa-solid fa-award" style="font-size: 3.5rem; color: var(--leaf-green);"></i>
-  </div>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
 
-  <h3 style="color: var(--forest-green); margin-bottom: 8px;">
-    Questionário Concluído!
-  </h3>
-  
-  <p style="color: var(--muted); margin-bottom: 24px;">
-    Módulo: <strong><?= htmlspecialchars($resultado['categoria_nome'] ?? 'Quiz Geral') ?></strong>
-  </p>
+    <main class="resultado-page">
 
-  <div style="background: var(--sand-beige); border-radius: var(--radius); padding: 24px; margin-bottom: 24px; border: 1px solid var(--border-color);">
-    <span style="font-size: 0.9rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Desempenho Geral</span>
-    <div style="font-size: 3rem; font-weight: 800; color: var(--forest-green); margin: 8px 0;">
-      <?= $resultado['pontuacao'] ?>%
-    </div>
-    <p style="margin: 0; color: var(--ink-soft); font-weight: 500;">
-      Acertou em <strong><?= $resultado['acertos'] ?></strong> de <strong><?= $resultado['total_perguntas'] ?></strong> perguntas.
-    </p>
-  </div>
+        <div class="resultado-card">
 
-  <div style="display: flex; gap: 12px; justify-content: center;">
-    <a href="quiz.php" class="btn btn-primary">Novo Questionário</a>
-    <a href="ranking.php" class="btn">Ver Ranking</a>
-  </div>
-</div>
+            <h1>Quiz finalizado!</h1>
 
-<?php require_once __DIR__ . '/../includes/footer.php'; ?>
+            <h2>Seu resultado</h2>
+
+            <p>
+                Pontuação:
+                <strong><?=$pontuacao?></strong>
+                / <?=$pontuacaoMaxima?>
+            </p>
+
+            <p>
+                Questões respondidas:
+                <?=$totalQuestoes?>
+            </p>
+
+            <p>
+                Tempo total:
+                <?=floor($tempo / 60)?> minutos e
+                <?=$tempo % 60?> segundos
+            </p>
+
+            <a href="ranking.php?tema_id=<?=$temaId?>">
+                Ver classificação deste tema
+            </a>
+
+            <p>
+                <a href="index.php">Voltar aos temas</a>
+            </p>
+
+        </div>
+
+    </main>
+
+</body>
+</html>
