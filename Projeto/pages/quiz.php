@@ -1,4 +1,3 @@
-
 <?php
 
 require_once __DIR__ . '/../includes/auth.php';
@@ -161,12 +160,12 @@ if (isset($_POST['proxima']) && $estado['respondida']) {
         );
 
         $_SESSION['quiz_resultado'] = [
-    'pontuacao' => $estado['pontuacao'],
-    'pontuacao_maxima' => $pontuacaoMaxima,
-    'total_questoes' => count($questoes),
-    'tempo' => $tempo,
-    'tema_id' => $estado['tema_id']
-];
+            'pontuacao' => $estado['pontuacao'],
+            'pontuacao_maxima' => $pontuacaoMaxima,
+            'total_questoes' => count($questoes),
+            'tempo' => $tempo,
+            'tema_id' => $estado['tema_id']
+        ];
 
         unset($_SESSION['quiz']);
 
@@ -186,28 +185,29 @@ if (isset($_POST['proxima']) && $estado['respondida']) {
 
     <link rel="stylesheet" href="../assets/style.css">
 </head>
-<body>
+
+<body class="quiz-body">
 
     <main class="quiz-page">
 
         <div class="quiz-card">
 
-            <p>
+            <p class="quiz-progresso">
                 Questão <?=$indice + 1?> de <?=count($questoes)?>
             </p>
 
-            <h2>
+            <h2 class="quiz-enunciado">
                 <?=htmlspecialchars($questao->getEnunciado(), ENT_QUOTES, 'UTF-8')?>
             </h2>
 
-            <p>
+            <p class="quiz-valor">
                 Valor: <?=$questao->getPontos()?> pontos
             </p>
 
             <?php if (!$estado['respondida']): ?>
 
                 <?php if ($erro != ''): ?>
-                    <p><?=$erro?></p>
+                    <p class="quiz-erro"><?=$erro?></p>
                 <?php endif; ?>
 
                 <form action="quiz.php" method="POST">
@@ -243,15 +243,19 @@ if (isset($_POST['proxima']) && $estado['respondida']) {
 
                 <?php if ($estado['acertou']): ?>
 
-                    <p>Você acertou! Parabéns!</p>
+                    <p class="quiz-feedback quiz-correto">
+                        Você acertou! Parabéns!
+                    </p>
 
-                    <p>
+                    <p class="quiz-pontos">
                         Você ganhou <?=$estado['pontos_ganhos']?> pontos.
                     </p>
 
                 <?php else: ?>
 
-                    <p>Resposta incorreta!</p>
+                    <p class="quiz-feedback quiz-incorreto">
+                        Resposta incorreta!
+                    </p>
 
                     <?php if ($alternativaCorreta): ?>
 
@@ -267,11 +271,11 @@ if (isset($_POST['proxima']) && $estado['respondida']) {
 
                 <?php endif; ?>
 
-                <p>
+                <p class="quiz-explicacao">
                     <?=htmlspecialchars($questao->getExplicacao(), ENT_QUOTES, 'UTF-8')?>
                 </p>
 
-                <p>
+                <p class="quiz-pontuacao">
                     Pontuação atual: <?=$estado['pontuacao']?>
                 </p>
 

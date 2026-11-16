@@ -1,4 +1,3 @@
-
 <?php
 
 require_once __DIR__ . '/../includes/auth.php';
@@ -27,7 +26,8 @@ $temaId = $resultado['tema_id'];
 
     <link rel="stylesheet" href="../assets/style.css">
 </head>
-<body>
+
+<body class="resultado-body">
 
     <main class="resultado-page">
 
@@ -37,29 +37,31 @@ $temaId = $resultado['tema_id'];
 
             <h2>Seu resultado</h2>
 
-            <p>
+            <p class="resultado-pontuacao">
                 Pontuação:
                 <strong><?=$pontuacao?></strong>
                 / <?=$pontuacaoMaxima?>
             </p>
 
-            <p>
+            <p class="resultado-detalhe">
                 Questões respondidas:
                 <?=$totalQuestoes?>
             </p>
 
-            <p>
+            <p class="resultado-detalhe">
                 Tempo total:
                 <?=floor($tempo / 60)?> minutos e
                 <?=$tempo % 60?> segundos
             </p>
 
-            <a href="ranking.php?tema_id=<?=$temaId?>">
+            <a class="resultado-ranking" href="ranking.php?tema_id=<?=$temaId?>">
                 Ver classificação deste tema
             </a>
 
             <p>
-                <a href="index.php">Voltar aos temas</a>
+                <a class="resultado-voltar" href="index.php">
+                    Voltar aos temas
+                </a>
             </p>
 
         </div>

@@ -1,4 +1,3 @@
-
 <?php
 
 require_once __DIR__ . '/../includes/auth.php';
@@ -12,14 +11,12 @@ if (!$temaId || $temaId < 1) {
     exit("Tema não informado.");
 }
 
-
 $repoTema = new TemaRepository();
 $tema = $repoTema->buscarPorId($temaId);
 
 if (!$tema) {
     exit("Tema não encontrado.");
 }
-
 
 $repo = new UsuarioRepository();
 $ranking = $repo->listarRankingPorTema($temaId);
@@ -28,67 +25,96 @@ $ranking = $repo->listarRankingPorTema($temaId);
 
 <!DOCTYPE html>
 <html lang="pt">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ranking - Ecoquiz</title>
+
+    <title>Classificação - Ecoquiz</title>
+
+    <link rel="stylesheet" href="../assets/style.css">
 </head>
-<body>
 
-    <h1>Classificação - <?=$tema->getNomeTema()?></h1>
+<body class="classificacao-body">
 
-    <?php if (count($ranking) == 0): ?>
+     
 
-        <p>Ainda não existem partidas concluídas nesse tema.</p>
+    <main class="classificacao-page">
 
-    <?php else: ?>
+        <div class="classificacao-card">
 
-        <table border="1">
+            <h1>
+                Classificação - <?=htmlspecialchars($tema->getNomeTema(), ENT_QUOTES, 'UTF-8')?>
+            </h1>
 
-            <thead>
-                <tr>
-                    <th>Posição</th>
-                    <th>Usuário</th>
-                    <th>Pontuação</th>
-                    <th>Tempo</th>
-                </tr>
-            </thead>
+            <?php if (count($ranking) == 0): ?>
 
-            <tbody>
+                <p class="classificacao-vazio">
+                    Ainda não existem partidas concluídas nesse tema.
+                </p>
 
-                <?php foreach ($ranking as $i => $usuario): ?>
+            <?php else: ?>
 
-                    <tr>
-                        <td><?=$i + 1?>º</td>
+                <div class="classificacao-tabela-container">
 
-                        <td>
-                            <?=htmlspecialchars($usuario['nome'], ENT_QUOTES, 'UTF-8')?>
-                        </td>
+                    <table class="classificacao-tabela">
 
-                        <td>
-                            <?=$usuario['pontuacao_total']?> pontos
-                        </td>
+                        <thead>
+                            <tr>
+                                <th>Posição</th>
+                                <th>Usuário</th>
+                                <th>Pontuação</th>
+                                <th>Tempo</th>
+                            </tr>
+                        </thead>
 
-                        <td>
-                            <?=sprintf(
-                                '%02d:%02d',
-                                intdiv((int) $usuario['tempo_segundos'], 60),
-                                (int) $usuario['tempo_segundos'] % 60
-                            )?>
-                        </td>
-                    </tr>
+                        <tbody>
 
-                <?php endforeach; ?>
+                            <?php foreach ($ranking as $i => $usuario): ?>
 
-            </tbody>
+                                <tr>
 
-        </table>
+                                    <td><?=$i + 1?>º</td>
 
-    <?php endif; ?>
+                                    <td>
+                                        <?=htmlspecialchars($usuario['nome'], ENT_QUOTES, 'UTF-8')?>
+                                    </td>
 
-    <p>
-        <a href="index.php">Voltar aos temas</a>
-    </p>
+                                    <td>
+                                        <?=$usuario['pontuacao_total']?> pontos
+                                    </td>
+
+                                    <td>
+                                        <?=sprintf(
+                                            '%02d:%02d',
+                                            intdiv((int) $usuario['tempo_segundos'], 60),
+                                            (int) $usuario['tempo_segundos'] % 60
+                                        )?>
+                                    </td>
+
+                                </tr>
+
+                            <?php endforeach; ?>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            <?php endif; ?>
+
+            <div class="classificacao-acoes">
+
+                <a class="classificacao-voltar" href="index.php">
+                    Voltar aos temas
+                </a>
+
+            </div>
+
+        </div>
+
+    </main>
 
 </body>
 </html>
