@@ -25,7 +25,7 @@ class TemaRepository {
         'SELECT * FROM temas WHERE id = :id'
     );
 
-    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->bindValue(':id', $id);
     $stmt->execute();
 
     $dados = $stmt->fetch();

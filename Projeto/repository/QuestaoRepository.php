@@ -28,7 +28,7 @@ class QuestaoRepository {
         'SELECT * FROM questoes WHERE tema_id = :tema_id'
     );
 
-    $stmt->bindValue(':tema_id', $temaId, PDO::PARAM_INT);
+    $stmt->bindValue(':tema_id', $temaId);
     $stmt->execute();
 
     $lista = [];

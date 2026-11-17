@@ -38,10 +38,10 @@ class RespostaUsuarioRepository {
              VALUES (:partida_id, :questao_id, 1, :acertou, :pontos)'
         );
 
-        $stmt->bindValue(':partida_id', $partidaId, PDO::PARAM_INT);
-        $stmt->bindValue(':questao_id', $questaoId, PDO::PARAM_INT);
-        $stmt->bindValue(':acertou', $acertou ? 1 : 0, PDO::PARAM_INT);
-        $stmt->bindValue(':pontos', $pontosGanhos, PDO::PARAM_INT);
+        $stmt->bindValue(':partida_id', $partidaId);
+$stmt->bindValue(':questao_id', $questaoId);
+$stmt->bindValue(':acertou', $acertou ? 1 : 0);
+$stmt->bindValue(':pontos', $pontosGanhos);
 
         $stmt->execute();
     }

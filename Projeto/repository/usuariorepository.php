@@ -79,10 +79,10 @@ class UsuarioRepository {
                 partidas.id ASC'
         );
 
-        $stmt->bindValue(':tema_id', $temaId, PDO::PARAM_INT);
+        $stmt->bindValue(':tema_id', $temaId);
         $stmt->execute();
 
-        $partidas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $partidas = $stmt->fetchAll();
 
         $ranking = [];
         $usuariosAdicionados = [];

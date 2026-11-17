@@ -31,7 +31,7 @@ class PartidaRepository {
              VALUES (:usuario_id, NOW())'
         );
 
-        $stmt->bindValue(':usuario_id', $usuarioId, PDO::PARAM_INT);
+        $stmt->bindValue(':usuario_id', $usuarioId);
         $stmt->execute();
 
         return (int) $this->pdo->lastInsertId();
@@ -47,9 +47,9 @@ class PartidaRepository {
              WHERE id = :id'
         );
 
-        $stmt->bindValue(':tempo', $tempo, PDO::PARAM_INT);
-        $stmt->bindValue(':pontuacao', $pontuacao, PDO::PARAM_INT);
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->bindValue(':tempo', $tempo);
+$stmt->bindValue(':pontuacao', $pontuacao);
+$stmt->bindValue(':id', $id);
 
         $stmt->execute();
     }

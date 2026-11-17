@@ -30,7 +30,7 @@ public function listarAlternativasPorQuestao(int $questaoId): array {
         'SELECT * FROM alternativas WHERE questao_id = :questao_id ORDER BY letra ASC'
     );
 
-    $stmt->bindValue(':questao_id', $questaoId, PDO::PARAM_INT);
+    $stmt->bindValue(':questao_id', $questaoId);
     $stmt->execute();
 
     $lista = [];
