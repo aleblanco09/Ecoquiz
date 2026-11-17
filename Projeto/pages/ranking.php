@@ -3,9 +3,9 @@
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../repository/UsuarioRepository.php';
 require_once __DIR__ . '/../repository/TemaRepository.php';
-require_once __DIR__ . '/../includes/header.php';
 
-$temaId = filter_input(INPUT_GET, 'tema_id', FILTER_VALIDATE_INT);
+
+$temaId = (int) $_GET['tema_id'];
 
 if (!$temaId || $temaId < 1) {
     exit("Tema não informado.");
@@ -44,7 +44,7 @@ $ranking = $repo->listarRankingPorTema($temaId);
         <div class="classificacao-card">
 
             <h1>
-                Classificação - <?=htmlspecialchars($tema->getNomeTema(), ENT_QUOTES, 'UTF-8')?>
+                Classificação - <?=htmlspecialchars($tema->getNomeTema())?>
             </h1>
 
             <?php if (count($ranking) == 0): ?>
@@ -77,7 +77,7 @@ $ranking = $repo->listarRankingPorTema($temaId);
                                     <td><?=$i + 1?>º</td>
 
                                     <td>
-                                        <?=htmlspecialchars($usuario['nome'], ENT_QUOTES, 'UTF-8')?>
+                                        <?=htmlspecialchars($usuario['nome'])?>
                                     </td>
 
                                     <td>
