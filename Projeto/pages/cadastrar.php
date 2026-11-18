@@ -7,19 +7,19 @@ $erro="";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($_POST['email']) || empty($_POST['senha']) || empty($_POST['nomeUsuario'])) {
-        $erro = "Preencha todos os campos!";
+        $erro = "Preencha todos os campos";
     }
     else if (strlen($_POST['senha']) < 4) {
-        $erro = "A senha deve ter pelo menos 4 caracteres!";
+        $erro = "A senha deve ter pelo menos 4 caracteres";
     }
     else if (strlen($_POST['nomeUsuario']) < 2) {
-        $erro = "Nome de usuário muito curto!";
+        $erro = "Nome de usuário muito curto";
     }
     else if ($repo->buscarPorNome($_POST['nomeUsuario']) !== null) {
-    $erro = "Este nome de usuário já está em uso!";
+    $erro = "Nome de usuário não disponível";
 }
     else if ($repo->buscarPorEmail($_POST['email']) !== null) {
-    $erro = "Este e-mail já está cadastrado!";}
+    $erro = "Este e-mail já está cadastrado";}
     else {
 
         $email = $_POST['email'];
