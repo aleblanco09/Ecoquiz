@@ -2,18 +2,33 @@
 require_once __DIR__ . '/../repository/UsuarioRepository.php';
 
 $repo = new UsuarioRepository();
+$erro="";
 
-if (isset($_POST['email']) || isset($_POST['senha']) || isset($_POST['nomeUsuario'])) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $email = $_POST['email'];
-    $senhaNormal = $_POST['senha'];
-    $senhaHash = hash('sha256', $senhaNormal);
-    $nomeUsuario = $_POST['nomeUsuario'];
+    if (empty($_POST['email']) || empty($_POST['senha']) || empty($_POST['nomeUsuario'])) {
+        $erro = "Preencha todos os campos!";
+    }
+    else if (strlen($_POST['senha']) < 4) {
+        $erro = "A senha deve ter pelo menos 4 caracteres!";
+    }
+    else if (strlen($_POST['nomeUsuario']) < 2) {
+        $erro = "Nome de usuário muito curto!";
+    }
+    else if ($repo->buscarPorEmail($_POST['email']) !== null) {
+    $erro = "Este e-mail já está cadastrado!";}
+    else {
 
-    $repo->criarUsuario($email, $senhaHash, $nomeUsuario);
+        $email = $_POST['email'];
+        $senhaNormal = $_POST['senha'];
+        $senhaHash = hash('sha256', $senhaNormal);
+        $nomeUsuario = $_POST['nomeUsuario'];
 
-    header('Location: index.php');
-    exit;
+        $repo->criarUsuario($email, $senhaHash, $nomeUsuario);
+
+        header('Location: index.php');
+        exit;
+    }
 }
 
 ?>
@@ -39,18 +54,21 @@ if (isset($_POST['email']) || isset($_POST['senha']) || isset($_POST['nomeUsuari
             <form action="cadastrar.php" method="POST">
 
                 <label for="email">E-mail:</label>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" name="email">
 
                 <label for="senha">Senha:</label>
-                <input type="password" id="senha" name="senha" required>
+                <input type="password" id="senha" name="senha">
 
                 <label for="nomeUsuario">Nome:</label>
-                <input type="text" id="nomeUsuario" name="nomeUsuario" required>
+                <input type="text" id="nomeUsuario" name="nomeUsuario">
 
                 <button type="submit">Criar conta</button>
+                <a href="login.php">Voltar para o login</a>
 
             </form>
-
+<?php if ($erro != ""): ?>
+    <p><?=$erro?></p>
+<?php endif; ?>
         </div>
 
     </main>
