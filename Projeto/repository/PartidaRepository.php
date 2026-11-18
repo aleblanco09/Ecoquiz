@@ -52,4 +52,18 @@ $stmt->bindValue(':id', $id);
 
         $stmt->execute();
     }
+
+    public function excluirPartida(int $partidaId, int $usuarioId): void {
+
+    $stmt = $this->pdo->prepare(
+        'DELETE FROM partidas
+         WHERE id = :id
+         AND usuario_id = :usuario_id
+         AND concluida = 0'
+    );
+
+    $stmt->bindValue(':id', $partidaId);
+    $stmt->bindValue(':usuario_id', $usuarioId);
+    $stmt->execute();
+}
 }

@@ -44,7 +44,7 @@ if (!isset($_SESSION['quiz'])) {
     exit;
 }
 
-$estado = &$_SESSION['quiz'];
+$estado = $_SESSION['quiz'];
 
 $questoes = $repoQuestao->listarQuestoesPorTema($estado['tema_id']);
 
@@ -72,10 +72,11 @@ $erro = '';
 
 if (isset($_POST['responder']) && !$estado['respondida']) {
 
-    $idAlternativa = filter_var(
-        $_POST['alternativa'] ?? null,
-        FILTER_VALIDATE_INT
-    );
+    $idAlternativa = 0;
+
+    if (isset($_POST['alternativa'])) {
+        $idAlternativa = (int) $_POST['alternativa'];
+    }
 
     $alternativaEscolhida = null;
 
@@ -111,6 +112,8 @@ if (isset($_POST['responder']) && !$estado['respondida']) {
         $estado['pontos_ganhos'] = $pontosGanhos;
         $estado['alternativa_escolhida'] = $idAlternativa;
 
+        $_SESSION['quiz'] = $estado;
+
         header('Location: quiz.php');
         exit;
     }
@@ -139,6 +142,8 @@ if (isset($_POST['proxima']) && $estado['respondida']) {
             $estado['pontos_ganhos'],
             $estado['alternativa_escolhida']
         );
+
+        $_SESSION['quiz'] = $estado;
 
         header('Location: quiz.php');
         exit;
@@ -197,7 +202,7 @@ if (isset($_POST['proxima']) && $estado['respondida']) {
             </p>
 
             <h2 class="quiz-enunciado">
-                <?=htmlspecialchars($questao->getEnunciado(), ENT_QUOTES, 'UTF-8')?>
+                <?=htmlspecialchars($questao->getEnunciado())?>
             </h2>
 
             <p class="quiz-valor">
@@ -225,7 +230,7 @@ if (isset($_POST['proxima']) && $estado['respondida']) {
 
                             <?=strtoupper($alternativa->getLetra())?>)
 
-                            <?=htmlspecialchars($alternativa->getTexto(), ENT_QUOTES, 'UTF-8')?>
+                            <?=htmlspecialchars($alternativa->getTexto())?>
 
                         </label>
 
@@ -264,7 +269,7 @@ if (isset($_POST['proxima']) && $estado['respondida']) {
 
                             <?=strtoupper($alternativaCorreta->getLetra())?>)
 
-                            <?=htmlspecialchars($alternativaCorreta->getTexto(), ENT_QUOTES, 'UTF-8')?>
+                            <?=htmlspecialchars($alternativaCorreta->getTexto())?>
                         </p>
 
                     <?php endif; ?>
@@ -272,7 +277,7 @@ if (isset($_POST['proxima']) && $estado['respondida']) {
                 <?php endif; ?>
 
                 <p class="quiz-explicacao">
-                    <?=htmlspecialchars($questao->getExplicacao(), ENT_QUOTES, 'UTF-8')?>
+                    <?=htmlspecialchars($questao->getExplicacao())?>
                 </p>
 
                 <p class="quiz-pontuacao">
