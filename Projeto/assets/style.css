@@ -356,6 +356,23 @@
     transform: translateY(-1px);
 }
 
+.cadastro-card .cadastro-voltar {
+    display: block;
+    text-align: center;
+    background-color: #198754;
+    color: white;
+    text-decoration: none;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 12px;
+    font-weight: bold;
+}
+
+.cadastro-card .cadastro-voltar:hover {
+    background-color: #146c43;
+}
+
+
 /* Quiz */
 .quiz-body {
     color: #263d2e;

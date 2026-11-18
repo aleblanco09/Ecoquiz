@@ -28,6 +28,23 @@ class UsuarioRepository {
         return null;
     }
 
+    public function buscarPorNome(string $nome): ?Usuario {
+
+    $stmt = $this->pdo->prepare(
+        'SELECT * FROM usuarios WHERE nome = :nome LIMIT 1'
+    );
+
+    $stmt->execute([':nome' => $nome]);
+
+    $dados = $stmt->fetch();
+
+    if ($dados) {
+        return new Usuario($dados);
+    }
+
+    return null;
+}
+
     public function criarUsuario(string $email, string $senha, string $nome) {
 
         $stmt = $this->pdo->prepare(

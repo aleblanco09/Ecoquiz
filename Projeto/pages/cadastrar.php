@@ -4,7 +4,7 @@ require_once __DIR__ . '/../repository/UsuarioRepository.php';
 $repo = new UsuarioRepository();
 $erro="";
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($_POST['email']) || empty($_POST['senha']) || empty($_POST['nomeUsuario'])) {
         $erro = "Preencha todos os campos!";
@@ -15,6 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     else if (strlen($_POST['nomeUsuario']) < 2) {
         $erro = "Nome de usuário muito curto!";
     }
+    else if ($repo->buscarPorNome($_POST['nomeUsuario']) !== null) {
+    $erro = "Este nome de usuário já está em uso!";
+}
     else if ($repo->buscarPorEmail($_POST['email']) !== null) {
     $erro = "Este e-mail já está cadastrado!";}
     else {
@@ -63,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <input type="text" id="nomeUsuario" name="nomeUsuario">
 
                 <button type="submit">Criar conta</button>
-                <a href="login.php">Voltar para o login</a>
+                <a href="login.php" class="cadastro-voltar">Voltar para o login</a>
 
             </form>
 <?php if ($erro != ""): ?>
