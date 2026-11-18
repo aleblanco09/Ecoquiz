@@ -1,3 +1,4 @@
+
 <?php
 require_once __DIR__ . '/../includes/auth.php';
 
@@ -9,6 +10,7 @@ if (!isset($_SESSION['quiz_resultado'])) {
 $resultado = $_SESSION['quiz_resultado'];
 
 $pontuacao = $resultado['pontuacao'];
+$acertos = $resultado['acertos'];
 $pontuacaoMaxima = $resultado['pontuacao_maxima'];
 $totalQuestoes = $resultado['total_questoes'];
 $tempo = $resultado['tempo'];
@@ -45,6 +47,11 @@ $temaId = $resultado['tema_id'];
             <p class="resultado-detalhe">
                 Questões respondidas:
                 <?=$totalQuestoes?>
+            </p>
+
+            <p class="resultado-detalhe">
+                Acertos:
+                <?=$acertos?>
             </p>
 
             <p class="resultado-detalhe">

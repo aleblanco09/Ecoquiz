@@ -34,6 +34,7 @@ if (!isset($_SESSION['quiz'])) {
         'tema_id' => $temaId,
         'indice' => 0,
         'pontuacao' => 0,
+        'acertos' => 0,
         'inicio_timestamp' => time(),
         'respondida' => false
     ];
@@ -41,6 +42,19 @@ if (!isset($_SESSION['quiz'])) {
     unset($_SESSION['quiz_resultado']);
 
     header('Location: quiz.php');
+    exit;
+}
+
+if (isset($_POST['voltar'])) {
+
+    $repoPartida->excluirPartida(
+        $_SESSION['quiz']['partida_id'],
+        $usuarioId
+    );
+
+    unset($_SESSION['quiz']);
+
+    header('Location: index.php');
     exit;
 }
 
@@ -95,6 +109,10 @@ if (isset($_POST['responder']) && !$estado['respondida']) {
     } else {
 
         $acertou = $alternativaEscolhida->getCorreta() === 1;
+
+        if ($acertou) {
+            $estado['acertos']++;
+        }
 
         $pontosGanhos = $acertou ? $questao->getPontos() : 0;
 
@@ -166,6 +184,7 @@ if (isset($_POST['proxima']) && $estado['respondida']) {
 
         $_SESSION['quiz_resultado'] = [
             'pontuacao' => $estado['pontuacao'],
+            'acertos' => $estado['acertos'],
             'pontuacao_maxima' => $pontuacaoMaxima,
             'total_questoes' => count($questoes),
             'tempo' => $tempo,
@@ -196,6 +215,12 @@ if (isset($_POST['proxima']) && $estado['respondida']) {
     <main class="quiz-page">
 
         <div class="quiz-card">
+
+            <form action="quiz.php" method="POST">
+                <button type="submit" name="voltar">
+                    Página principal
+                </button>
+            </form>
 
             <p class="quiz-progresso">
                 Questão <?=$indice + 1?> de <?=count($questoes)?>
